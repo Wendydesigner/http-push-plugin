@@ -1,0 +1,22 @@
+{
+  "name": "http-push-plugin",
+  "version": "1.0.0",
+  "description": "本地工程文件实时上传服务器",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "http-push",
+    "fs",
+    "hot-update"
+  ],
+  "author": "wenyan15@outlook.com",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "node-watch": "^0.6.3",
+    "request-promise": "^4.2.5"
+  }
+}
+
