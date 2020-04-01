@@ -1,6 +1,6 @@
 {
   "name": "http-push-plugin",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "本地工程文件实时上传服务器",
   "main": "index.js",
   "scripts": {
@@ -12,11 +12,15 @@
     "hot-update"
   ],
   "author": "wenyan15@outlook.com",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Wendydesigner/http-push-plugin.git"
+  },
   "license": "ISC",
   "dependencies": {
     "chalk": "^3.0.0",
     "node-watch": "^0.6.3",
-    "request-promise": "^4.2.5"
+    "request-promise": "^4.2.5",
+    "request": "^2.88.2"
   }
 }
-

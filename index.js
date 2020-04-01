@@ -91,4 +91,3 @@ HttpPushPlugin.prototype.watch = function() {
 }
 
 module.exports = HttpPushPlugin;
-

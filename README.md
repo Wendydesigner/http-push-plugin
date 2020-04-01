@@ -1,5 +1,9 @@
 # http-push-plugin
 
+<a href="https://nodei.co/npm/http-push-plugin/"><img src="https://nodei.co/npm/http-push-plugin.png?downloads=true&downloadRank=true&stars=true"></a>
+[![NPM](https://nodei.co/npm/http-push-plugin.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/http-push-plugin/)
+
+
 ## Features
 * 本地与服务器http通信
 * 修改本地文件，实时上传
@@ -122,4 +126,3 @@ nohup node server.js &
 cd ${project}
 node ./plugin.js
 ```
-
