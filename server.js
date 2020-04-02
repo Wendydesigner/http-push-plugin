@@ -1,53 +1,3 @@
-# http-push-plugin
-
-<a href="https://nodei.co/npm/http-push-plugin/"><img src="https://nodei.co/npm/http-push-plugin.png?downloads=true&downloadRank=true&stars=true"></a>
-[![NPM](https://nodei.co/npm/http-push-plugin.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/http-push-plugin/)
-
-
-## Features
-
-* 在无打包工具下的node插件
-* 本地与服务器实现文件上传http通信
-* 修改本地文件/文件夹，实时上传
-* 添加/删除本地文件/文件夹，实时更新
-* 上传成功失败提醒
-* 添加ignoreDir选项（默认过滤"node_modules", ".git"文件夹）,对其匹配的文件及文件夹进行过滤
-* 服务端脚本同样支持webpack/fis等部署
-
-## Installation
-```bash
-npm install http-push-plugin -D
-```
-
-## Example
-
-- 本地部署
-放在本地目标工程${project}中
-```bash
-vim ./plugin.js
-```
-```js
-const HttpPushPlugin = require('http-push-plugin');
-// 服务端文件上传接口
-const USER_RECEIVER = 'http://ip:port/receiver';
-// 上传文件目录
-const UPLOAD_TO = '/home/**';
-
-new HttpPushPlugin({
-    receiver: USER_RECEIVER,
-    to: UPLOAD_TO,
-    ignoreDir: []
-});
-```
-
-- 服务端部署
-
-创建作为服务器的文件夹
-```bash
-mkdir receiver && cd receiver && vim server.js
-```
-填充server.js文件
-```js
 #!/usr/bin/env node
  
 var http = require('http');
@@ -150,16 +100,3 @@ var server = http.createServer(function (req, res) {
 server.listen(PORT, function () {
     console.log('receiver listening *:' + PORT);
 });
-```
-持续启动服务
-```bash
-nohup node server.js &
-```
-
-
-## 启动
-- 本地启动
-```bash
-cd ${project}
-node ./plugin.js
-```

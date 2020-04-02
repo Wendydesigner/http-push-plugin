@@ -4,7 +4,9 @@
   "description": "本地工程文件实时上传服务器",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm install",
+    "test": "node test.js",
+    "server": "node server.js"
   },
   "keywords": [
     "http-push",
@@ -22,5 +24,9 @@
     "node-watch": "^0.6.3",
     "request-promise": "^4.2.5",
     "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "formidable": "^1.2.2",
+    "mkdirp": "^1.0.3"
   }
 }

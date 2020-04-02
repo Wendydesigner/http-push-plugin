@@ -3,24 +3,39 @@ const rp = require('request-promise');
 const chalk = require('chalk');
 const watch = require('node-watch');
 
+const IGNORE_DIR = [
+    'node_modules',
+    '.git'
+];
+
+function isDir(path) {
+    const stat = fs.lstatSync(path);
+    return stat.isDirectory();
+}
+
 function upload(url, data, filepath, subpath, callback) {
-    const formData = Object.assign(data, {
-        file: {
-            value: fs.createReadStream(filepath),
-            options: {
-                filename: subpath
+    const options = {
+        url
+    }
+    if (data.type === 'remove') {
+        options.body = data;
+        options.json = true;
+    } else {
+        if (isDir(filepath)) return;
+        const uploaddata = data;
+        options.formData = Object.assign(uploaddata, {
+            file: {
+                value: fs.createReadStream(filepath),
+                options: {
+                    filename: subpath
+                }
             }
-        }
-    });
-    rp.post({
-        url: url,
-        formData: formData
-    }, function(err, res, body) {
-        if (err) {
-            callback(err);
-            return;
-        }
+        });
+    }
+    rp.post(options).then(() => {
         callback();
+    }).catch((err) => {
+        callback(err);
     })
 }
 
@@ -32,14 +47,26 @@ function upload(url, data, filepath, subpath, callback) {
  * @param options
  * @param options.receiver
  * @param options.to
+ * @param options.ignoreDir
  *
  * @constructor
  */
 function HttpPushPlugin(options) {
     this.options = options;
-    this.ignoreDir = [
-        'node_modules'
-    ];
+    if (!this.options || !this.options.to || !this.options.receiver) {
+        console.error(chalk.red(`[error]
+            请填写默认参数,如:
+            new HttpPushPlugin({
+                receiver: USER_RECEIVER,
+                to: UPLOAD_TO
+            });`));
+        return;
+    }
+    if (options.ignoreDir && Object.prototype.toString.call(options.ignoreDir) !== '[object Array]') {
+        console.error(chalk.red('ignoreDir为数组'));
+        return;
+    }
+    this.ignoreDir = options.ignoreDir ? options.ignoreDir.concat(IGNORE_DIR) : IGNORE_DIR;
     this.rootpath = process.cwd();
     this.upload();
     this.watch();
@@ -55,8 +82,7 @@ HttpPushPlugin.prototype.upload = function(relPath = '') {
     list.filter((file) => {
         return this.ignoreDir.indexOf(file) == -1;
     }).forEach(file => {
-        const stat = fs.lstatSync(`${path}/${file}`);
-        if (stat.isDirectory()) {
+        if (isDir(`${path}/${file}`)) {
             this.upload(`${relativePath}/${file}`);
         } else {
             upload(opt.receiver, {
@@ -75,11 +101,14 @@ HttpPushPlugin.prototype.upload = function(relPath = '') {
 HttpPushPlugin.prototype.watch = function() {
     const opt = this.options;
     watch('./', {
-        filter: f => !/node_modules/.test(f),
+        filter: f => {
+            return !(this.ignoreDir.some((item) => f === item));
+        },
         recursive: true
     }, (event, name) => {
         upload(opt.receiver, {
-            to: `${opt.to}/${name}`
+            to: `${opt.to}/${name}`,
+            type: event
         }, `${this.rootpath}/${name}`, name, (err, res) => {
             if (err) {
                 console.error(name + ' - ' + chalk.red('[error] [' + err + ']'));
