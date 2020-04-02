@@ -1,6 +1,6 @@
 {
   "name": "http-push-plugin",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "本地工程文件实时上传服务器",
   "main": "index.js",
   "scripts": {
